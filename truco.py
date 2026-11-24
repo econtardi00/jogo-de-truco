@@ -16,7 +16,6 @@ class Baralho:
     def __init__(self):
         self.cartas = [Carta(v, n) for v in Carta.VALORES for n in Carta.NAIPES]
 
-
     def embaralhar(self):
         random.shuffle(self.cartas)
 
@@ -29,17 +28,50 @@ class Baralho:
 
         return mao_jogador
 
-class Jogador:
-    ...
+    def virar_carta(self):
+        vira = self.cartas.pop()
+
+        return vira
+
+
+class Jogador():
+    def __init__(self):
+        self.mao = []
+
+    def receber_mao(self, cartas):
+        self.mao = cartas
+
+        return self.mao
+
+    def jogar_carta(self, carta_escolhida):
+        if not (1 <= carta_escolhida <= len(self.mao)):
+            raise ValueError(f'Digite um índice de 1 a {len(self.mao)}')
         
+        return self.mao.pop(carta_escolhida - 1) # Começar a lista pelo indice 1.
 
 
-if __name__ == '__main__':
+# ==========================================
+# FUNÇÕES DE INTERFACE E EXECUÇÃO(em andamento)
+# ==========================================
+
+
+def exibir_mao(mao): 
+    cartas_formatadas = [f"{i} - {carta}" for i, carta in enumerate(mao, start=1)]
+    print('Sua mão:'," | ".join(cartas_formatadas))
+
+def pedir_carta(jogador):
+    ...
+
+    
+def main():
+    j = Jogador()
     b = Baralho()
-    print('Cartas no baralho:', len(b.cartas))   # tem que dar 40
 
     b.embaralhar()
-    mao = b.distribuir()
-    print(f'Mão:', *mao, sep='  | ')             # 3 cartas
-    print('Cartas na mão:', len(mao))            # tem que dar 3
-    print('Cartas no monte:', len(b.cartas))     # tem que dar 37
+    cartas = b.distribuir()
+    j.receber_mao(cartas)
+
+    exibir_mao(j.mao)
+
+if __name__ == '__main__':
+    main()
