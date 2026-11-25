@@ -41,37 +41,53 @@ class Jogador():
     def receber_mao(self, cartas):
         self.mao = cartas
 
-        return self.mao
-
     def jogar_carta(self, carta_escolhida):
         if not (1 <= carta_escolhida <= len(self.mao)):
-            raise ValueError(f'Digite um índice de 1 a {len(self.mao)}')
+            raise IndexError(f'Digite um índice de 1 a {len(self.mao)}')
         
-        return self.mao.pop(carta_escolhida - 1) # Começar a lista pelo indice 1.
+        return self.mao.pop(carta_escolhida - 1)
 
 
 # ==========================================
-# FUNÇÕES DE INTERFACE E EXECUÇÃO(em andamento)
+# FUNÇÕES DE INTERFACE E EXECUÇÃO
 # ==========================================
 
 
-def exibir_mao(mao): 
+def exibir_mao(mao):
     cartas_formatadas = [f"{i} - {carta}" for i, carta in enumerate(mao, start=1)]
     print('Sua mão:'," | ".join(cartas_formatadas))
 
-def pedir_carta(jogador):
-    ...
+def pedir_indice(jogador):
+    while True:
+        exibir_mao(jogador.mao)
+        try:
+            escolha = int(input('Digite o índice da carta para jogar: '))
+            carta_escolhida = jogador.jogar_carta(escolha)
+            print(f'Você jogou: {carta_escolhida}. \n')
+            break
 
-    
-def main():
+        except ValueError:
+            print('Entrada inválida! Digite apenas números inteiros.\n')
+        except IndexError as erro:
+            print(f'{erro}\n')
+
+    return carta_escolhida
+
+def iniciar_jogo():
     j = Jogador()
     b = Baralho()
-
     b.embaralhar()
     cartas = b.distribuir()
     j.receber_mao(cartas)
 
-    exibir_mao(j.mao)
+    vira = b.virar_carta()
+    print(f'Vira: {vira}\n')
+
+    while j.mao:
+        carta_jogador = pedir_indice(j) # Guardar a carta do Jogador para comparação.
+
+    print('Fim da mão!')
+
 
 if __name__ == '__main__':
-    main()
+    iniciar_jogo()
