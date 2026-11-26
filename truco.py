@@ -47,6 +47,11 @@ class Jogador():
         
         return self.mao.pop(carta_escolhida - 1)
 
+class Bot(Jogador):
+    def jogar_carta(self, carta_escolhida=None):
+        indice_aleatorio = random.randrange(len(self.mao))
+        return self.mao.pop(indice_aleatorio)
+
 
 # ==========================================
 # FUNÇÕES DE INTERFACE E EXECUÇÃO
@@ -57,13 +62,12 @@ def exibir_mao(mao):
     cartas_formatadas = [f"{i} - {carta}" for i, carta in enumerate(mao, start=1)]
     print('Sua mão:'," | ".join(cartas_formatadas))
 
-def pedir_indice(jogador):
+def pedir_carta_usuario(jogador):
     while True:
         exibir_mao(jogador.mao)
         try:
             escolha = int(input('Digite o índice da carta para jogar: '))
             carta_escolhida = jogador.jogar_carta(escolha)
-            print(f'Você jogou: {carta_escolhida}. \n')
             break
 
         except ValueError:
@@ -74,17 +78,25 @@ def pedir_indice(jogador):
     return carta_escolhida
 
 def iniciar_jogo():
-    j = Jogador()
-    b = Baralho()
-    b.embaralhar()
-    cartas = b.distribuir()
-    j.receber_mao(cartas)
+    jogador = Jogador()
+    baralho = Baralho()
+    bot = Bot()
+    baralho.embaralhar()
 
-    vira = b.virar_carta()
+
+    jogador.receber_mao(baralho.distribuir())
+    bot.receber_mao(baralho.distribuir())
+
+    vira = baralho.virar_carta()
     print(f'Vira: {vira}\n')
 
-    while j.mao:
-        carta_jogador = pedir_indice(j) # Guardar a carta do Jogador para comparação.
+
+    while jogador.mao:
+        carta_jogador = pedir_carta_usuario(jogador)      
+        print(f'Você jogou: {carta_jogador}. \n')
+
+        carta_bot = bot.jogar_carta()
+        print(f'O oponente jogou: {carta_bot}\n')
 
     print('Fim da mão!')
 

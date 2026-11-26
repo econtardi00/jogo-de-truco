@@ -1,4 +1,4 @@
-# 🃏 jogo-de-truco
+# 🃏 Truco
 Jogo de Truco desenvolvido em Python para estudo de programação (em desenvolvimento).
 
 ## 📜 Regras
